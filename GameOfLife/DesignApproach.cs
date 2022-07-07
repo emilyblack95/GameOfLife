@@ -66,8 +66,6 @@
             gameInstance.RunIterations(_ITERATIONS);
 
             #endregion
-
-            // TODO: visualizations?
         }
     }
 
