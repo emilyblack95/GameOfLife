@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using GameOfLife;
+using System.Diagnostics;
 
 namespace Solution
 {
@@ -65,12 +66,12 @@ namespace Solution
                 watch.Restart();
 
                 GameState initialGameState = new(coords);
-                GameOfLife gameInstance = new(initialGameState);
+                GameOfLifeBoard gameInstance = new(initialGameState);
 
                 // Populate initial dead neighbors
                 foreach (var cell in points)
                 {
-                    coords.TryAdd(cell, GameOfLife.ComputeNextDead(cell, new HashSet<(long, long)>()));
+                    coords.TryAdd(cell, GameOfLifeBoard.ComputeNextDead(cell, new HashSet<(long, long)>()));
                 }
 
                 // Run iterations
