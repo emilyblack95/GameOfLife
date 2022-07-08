@@ -11,7 +11,7 @@
         /// <summary>
         /// The 8 Cardinal Points: N S E W NE SE SW NW
         /// </summary>
-        private static readonly List<(long, long)> CardinalPoints = new() { (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1) };
+        private static readonly List<Point> CardinalPoints = new() { new(-1, -1), new(-1, 0), new(-1, 1), new(0, 1), new(1, 1), new(1, 0), new(1, -1), new(0, -1) };
 
         /// <summary>
         /// Default constructor.
@@ -50,7 +50,7 @@
                 // Life 1.06 format
                 foreach (var cell in nextState.Coordinates.Keys)
                 {
-                    Console.WriteLine(cell.Item1 + " " + cell.Item2);
+                    Console.WriteLine(cell.X + " " + cell.Y);
                 }
 
                 Console.WriteLine();
@@ -65,10 +65,10 @@
         /// Rule 2: If a "dead" cell had *exactly* 3 alive neighbors, it becomes alive.
         /// </summary>
         /// <returns>Next set of coordinates.</returns>
-        public Dictionary<(long, long), HashSet<(long, long)>> ComputeNextState()
+        public Dictionary<Point, HashSet<Point>> ComputeNextState()
         {
-            Dictionary<(long, long), HashSet<(long, long)>> nextAlive = new();
-            (long, long) computedCoord;
+            Dictionary<Point, HashSet<Point>> nextAlive = new();
+            Point computedCoord;
             int counter = 0;
 
             #region Rule 1
@@ -77,7 +77,7 @@
             {
                 foreach (var cardinalPoint in CardinalPoints)
                 {
-                    computedCoord = (cell.Item1 + cardinalPoint.Item1, cell.Item2 + cardinalPoint.Item2);
+                    computedCoord = new(cell.X + cardinalPoint.X, cell.Y + cardinalPoint.Y);
 
                     if (States.Last().Coordinates.ContainsKey(computedCoord))
                     {
@@ -88,7 +88,7 @@
                 // If rule 1 is passed, add to next alive list
                 if (counter == 2 || counter == 3)
                 {
-                    nextAlive.TryAdd(cell, new HashSet<(long, long)>());
+                    nextAlive.TryAdd(cell, new HashSet<Point>());
                 }
 
                 counter = 0;
@@ -106,7 +106,7 @@
                     // that means it's around 3 active cells. Add to alive list.
                     if (CountDeadOccurences(cell) == 3)
                     {
-                        nextAlive.TryAdd(cell, new HashSet<(long, long)>());
+                        nextAlive.TryAdd(cell, new HashSet<Point>());
                     }
                 }
             }
@@ -130,15 +130,15 @@
         /// Computes next list of dead neighbors given the next list of alive cells.
         /// </summary>
         /// <returns>Next set of dead neighbors.</returns>
-        public static HashSet<(long, long)> ComputeNextDead((long, long) cell, HashSet<(long, long)> listOfAlive)
+        public static HashSet<Point> ComputeNextDead(Point cell, HashSet<Point> listOfAlive)
         {
-            HashSet<(long, long)> result = new();
+            HashSet<Point> result = new();
 
             foreach (var cardinalPoint in CardinalPoints)
             {
-                (long, long) computedCoord = (cell.Item1 + cardinalPoint.Item1, cell.Item2 + cardinalPoint.Item2);
+                Point computedCoord = new(cell.X + cardinalPoint.X, cell.Y + cardinalPoint.Y);
 
-                if (!listOfAlive.Contains((cell.Item1 + cardinalPoint.Item1, cell.Item2 + cardinalPoint.Item2)))
+                if (!listOfAlive.Contains(computedCoord))
                 {
                     result.Add(computedCoord);
                 }
@@ -151,7 +151,7 @@
         /// Counts number of occurences of cell between all dead neighbors based off of last stored state.
         /// </summary>
         /// <returns>Count of cell in dead neighbors lists.</returns>
-        private int CountDeadOccurences((long, long) cell)
+        private int CountDeadOccurences(Point cell)
         {
             int count = 0;
 

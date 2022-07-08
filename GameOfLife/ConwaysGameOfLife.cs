@@ -25,8 +25,8 @@ namespace Solution
             {
                 #region Variables
 
-                Dictionary<(long, long), HashSet<(long, long)>> coords = new();
-                HashSet<(long, long)> points = new();
+                Dictionary<Point, HashSet<Point>> coords = new();
+                HashSet<Point> points = new();
                 Stopwatch watch = Stopwatch.StartNew();
                 string? input = "riotgames";
 
@@ -53,7 +53,7 @@ namespace Solution
 
                     if (parsed.Length == 2)
                     {
-                        points.Add((parsed[0], parsed[1]));
+                        points.Add(new(parsed[0], parsed[1]));
                     }
 
                     input = Console.ReadLine();
@@ -71,7 +71,7 @@ namespace Solution
                 // Populate initial dead neighbors
                 foreach (var cell in points)
                 {
-                    coords.TryAdd(cell, GameOfLifeBoard.ComputeNextDead(cell, new HashSet<(long, long)>()));
+                    coords.TryAdd(cell, GameOfLifeBoard.ComputeNextDead(cell, new HashSet<Point>()));
                 }
 
                 // Run iterations

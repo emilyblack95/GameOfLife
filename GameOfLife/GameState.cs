@@ -8,7 +8,7 @@
         /// <summary>
         /// KVP of each Alive Coordinate <--> List of Dead Neighbors on the board
         /// </summary>
-        public Dictionary<(long, long), HashSet<(long, long)>> Coordinates { get; set; }
+        public Dictionary<Point, HashSet<Point>> Coordinates { get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -21,7 +21,7 @@
         /// <summary>
         /// Overloaded constructor.
         /// </summary>
-        public GameState(Dictionary<(long, long), HashSet<(long, long)>> coordinates)
+        public GameState(Dictionary<Point, HashSet<Point>> coordinates)
         {
             Coordinates = coordinates;
         }
